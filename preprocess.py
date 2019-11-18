@@ -24,18 +24,18 @@ def get_feature(files):
     
     return data
 
-tuple_ = os.walk(inpath)   
-dirname, dirnames, filenames = tuple_[0], tuple_[1], tuple_[2]
+filenames = os.listdir(inpath)
 
 pool = Pool(os.cpu_count())
 data_list = []
 data_list.append(pool.map(get_feature, filenames))
-data_list = np.array(datalist[0])
+data_list = np.array(data_list[0])
+np.save(outpath+'feature.npy', data_list)
 print(data_list.shape)
 
 label_list=[]
 label_list.append(pool.map(get_label, filenames))
 label_list = np.array(label_list[0])
+np.save(outpath+'label.npy', label_list)
 print(label_list.shape)
 
-#f.writecsv(outFolder, tmp_data, tmp_label)
