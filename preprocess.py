@@ -4,8 +4,8 @@ from multiprocessing import  Pool
 import matplotlib.pyplot as plt
 
 dirpath = './iccad1/'
-inpath = dirpath + 'train_image/'
-outpath = dirpath + 'train_data/'
+inpath = dirpath + 'train/'
+outpath = dirpath 
 
 dim_1 = 1200
 dim_2 = 1200
@@ -19,7 +19,7 @@ def get_label(files):
 
 def get_feature(files):
     print("processing files %s"%files)
-    data = plt.imread(os,path.join(dirname, files))
+    data = plt.imread(os.path.join(inpath, files))
     data /= 255 #rescale  
     
     return data
@@ -38,4 +38,5 @@ label_list.append(pool.map(get_label, filenames))
 label_list = np.array(label_list[0])
 np.save(outpath+'label.npy', label_list)
 print(label_list.shape)
+
 
