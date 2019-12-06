@@ -99,7 +99,7 @@ def classify_model(net, is_training):
 		
 	return predict
         
-def complete_model(net, is_training, is_inception=False):
+def complete_model(net, is_training, is_inception):
 	net = encoder_decoder(net)
 	net = connected_layer(net)
 		
