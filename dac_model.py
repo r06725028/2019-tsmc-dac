@@ -102,18 +102,19 @@ class DAC(tf.keras.Model):
         self.connected_layer = connected_layer
         self.classify_model = classify_model
 
-    def call(self, inputs):
-        net = self.encoder_decoder(inputs)
-        net = self.connected_layer(net)
+    def call(self, inputs, use_train_params=False):
+        with tf.variable_scope('dac', reuse=use_train_params):
+            net = self.encoder_decoder(inputs)
+            net = self.connected_layer(net)
 
-        if self.is_inception:
-            net = self.inception_A(net, 'second_layer')
-            net = self.inception_B(net, 'third_layer')
-            net = self.inception_A(net, 'fourth_layer')
-            net = self.inception_A(net, 'fifth_layer')
-            net = self.inception_A(net, 'sixth_layer')
-            net = self.inception_A(net, 'seventh_layer')
+            if self.is_inception:
+                net = self.inception_A(net, 'second_layer')
+                net = self.inception_B(net, 'third_layer')
+                net = self.inception_A(net, 'fourth_layer')
+                net = self.inception_A(net, 'fifth_layer')
+                net = self.inception_A(net, 'sixth_layer')
+                net = self.inception_A(net, 'seventh_layer')
     
-        pred = self.classify_model(net, self.is_training)
-        return pred
+            pred = self.classify_model(net, self.is_training)
+            return pred
 

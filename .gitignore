@@ -1,3 +1,5 @@
+*.swp
+raw.txt
 checkpoints/
 iccad1/
 __pycache__/

@@ -1,3 +1,4 @@
+import os
 import tensorflow as tf
 import numpy as np
 from tqdm import tqdm
@@ -12,8 +13,7 @@ from dac_model import DAC
 IMG_DIM= 1200
 BATCH_SIZE = 32
 
-def test_model(input_arr, total_size, model_dir,\
-                dim=input_dim, is_training=False):
+def test_model(input_arr, total_size, model_dir, is_training=False):
 
     inp_node = tf.placeholder(shape=[None, IMG_DIM, IMG_DIM, 1], dtype=tf.float32)
 
@@ -22,13 +22,13 @@ def test_model(input_arr, total_size, model_dir,\
 
     result_arr = []
     
+    init = tf.global_variables_initializer()
     with tf.Session() as sess:
-        init = tf.global_variables_initializer()
         sess.run(init)
         # restore model
         checkpoint = tf.train.Checkpoint(lily_model=model)
         # latest checkpoint
-        checkpoint.resotre(tf.train.latest_checkpoint(os.path.join(model_dir))
+        checkpoint.restore(tf.train.latest_checkpoint(os.path.join(model_dir)))
         # specific checkpoint
         # checkpoint.restore(os.path.join(model_dir, 'model.ckpt-1'))
         i = j = 0
@@ -47,9 +47,10 @@ def test_model(input_arr, total_size, model_dir,\
         print(str(prob))
         result_arr.append(prob)
 
-    # (batch_num, BATCH_SIZE, 2) -> (total_size, 2)
-    result = np.vstack(result_arr)
-    return result
+        # (batch_num, BATCH_SIZE, 2) -> (total_size, 2)
+        result = np.vstack(result_arr)
+        # pred_prob, sess is for grad_cam usage
+        return result, pred_prob, sess
 
 if __name__ == '__main__':
         #input_arr = np.load('iccad1/feature.npy').reshape(-1, IMG_DIM, IMG_DIM, 1)
@@ -61,5 +62,10 @@ if __name__ == '__main__':
         model_dir = './checkpoint/'
 
         # * we set "is_training = False" for model parameters
-        pred_dist = test_model(input_arr, total_size=input_arr.shape[0], model_dir=model_dir, is_training=False)
+        pred_dist, _, sess = test_model(input_arr, total_size=input_arr.shape[0], model_dir=model_dir, is_training=False)
+        with open('raw.txt', 'w') as f:
+            for a in sess.graph.get_operations():
+                f.write(str(a) + "\n")
+
+        print(sess.graph.get_operations())
 
