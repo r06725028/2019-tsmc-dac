@@ -2,4 +2,5 @@
 raw.txt
 checkpoints/
 iccad1/
+*.png
 __pycache__/
