@@ -49,7 +49,7 @@ CUDA_VISIBLE_DEVICES="" python3 grad_cam.py # CPU-version
 
 ## How to use tensorboard
 ```
-LC_ALL=C tensorboard --log_dir='./tensorboard'
+LC_ALL=C tensorboard --logdir='./tensorboard'
 
 # then enter ip:1006 to see the what's going on
 ```
