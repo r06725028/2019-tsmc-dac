@@ -69,7 +69,7 @@ def train_model(train_input, train_label, val_input, val_label, total_size, mode
                     val_loss_val, val_acc_val = sess.run([val_loss, val_accuracy],
                                                              feed_dict= { val_input_node : val_input, val_label_node: val_label })
                     print('(VALIDATE) epoch : {} | step : {} | loss : {} | accuracy : {}'.format(epoch, step, val_loss_val, val_acc_val))
-                    checkpoint.save(os.path.join(model_dir, 'model.cpkt'))
+                    checkpoint.save(os.path.join(model_dir, 'model.ckpt'))
                     print("Model saved in {}".format(model_dir))
 
 if __name__ == '__main__':
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         val_input_arr = input_arr[400:]
         val_label_arr = label_arr[400:]
 
-        total_size = input_arr.shape[0]
+        total_size = train_input_arr.shape[0]
 
         train_model(train_input_arr, train_label_arr, val_input_arr, val_label_arr, total_size, model_dir, is_training=True)
 
